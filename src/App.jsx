@@ -5,7 +5,6 @@ import Symptoms from "./components/Symptoms";
 import Result from "./components/Result";
 
 function App() {
-
   const [symptoms, setSymptoms] = useState({
     fever: false,
     cough: false,
@@ -26,13 +25,12 @@ function App() {
   }
 
   function analyze() {
-
     const {
       fever,
       cough,
       headache,
       soreThroat,
-      runnyNose
+      runnyNose,
     } = symptoms;
 
     if (fever && cough && soreThroat) {
@@ -41,41 +39,31 @@ function App() {
         rule: "Temperatur + Öskürək + Boğaz ağrısı",
         score: 3,
       });
-    }
-
-    else if (runnyNose && cough && soreThroat) {
+    } else if (runnyNose && cough && soreThroat) {
       setResult({
         diagnosis: "Soyuqdəymə ehtimalı yüksəkdir.",
         rule: "Burun axması + Öskürək + Boğaz ağrısı",
         score: 3,
       });
-    }
-
-    else if (headache && fever) {
+    } else if (headache && fever) {
       setResult({
         diagnosis: "Baş ağrısı və temperatur müşahidə olunur.",
         rule: "Baş ağrısı + Temperatur",
         score: 2,
       });
-    }
-
-    else if (cough && soreThroat) {
+    } else if (cough && soreThroat) {
       setResult({
         diagnosis: "Tənəffüs yolu infeksiyası əlamətləri ola bilər.",
         rule: "Öskürək + Boğaz ağrısı",
         score: 2,
       });
-    }
-
-    else if (runnyNose) {
+    } else if (runnyNose) {
       setResult({
         diagnosis: "Yüngül soyuqdəymə əlaməti ola bilər.",
         rule: "Burun axması",
         score: 1,
       });
-    }
-
-    else {
+    } else {
       setResult({
         diagnosis: "Kifayət qədər məlumat yoxdur.",
         rule: "Heç bir qayda uyğun gəlmədi",
@@ -84,40 +72,59 @@ function App() {
     }
   }
 
-  return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-5">
+  function reset() {
+    setSymptoms({
+      fever: false,
+      cough: false,
+      headache: false,
+      soreThroat: false,
+      runnyNose: false,
+    });
 
-      <div className="bg-white w-full max-w-lg p-8 rounded-2xl shadow-lg">
+    setResult(null);
+  }
+
+  return (
+    <div className="min-h-screen bg-[#070b14] px-4 py-10">
+
+      <div className="mx-auto max-w-xl">
 
         <Header />
 
-        <Symptoms
-          symptoms={symptoms}
-          handleChange={handleChange}
-        />
+        <div className="mt-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-2xl backdrop-blur-xl">
 
-        <div className="flex gap-3 mt-6">
+          <Symptoms
+            symptoms={symptoms}
+            handleChange={handleChange}
+          />
 
-          <button
-            onClick={analyze}
-            className="flex-1 bg-black text-white py-3 rounded-xl"
-          >
-            🤖 Analiz et
-          </button>
+          <div className="mt-7 flex gap-3">
 
-          <button
-            onClick={() => setResult(null)}
-            className="px-5 border rounded-xl"
-          >
-            Reset
-          </button>
+            <button
+              onClick={analyze}
+              className="flex-1 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 py-3 font-semibold text-black transition hover:scale-[1.02] hover:shadow-lg hover:shadow-cyan-500/20"
+            >
+              🤖 Analyze
+            </button>
+
+            <button
+              onClick={reset}
+              className="rounded-xl border border-white/10 bg-white/5 px-5 text-sm text-slate-300 transition hover:bg-white/10"
+            >
+              Reset
+            </button>
+
+          </div>
+
+          <Result result={result} />
 
         </div>
 
-        <Result result={result} />
+        <p className="mt-6 text-center text-xs text-slate-600">
+          Rule-based system • React • Tailwind CSS
+        </p>
 
       </div>
-
     </div>
   );
 }
